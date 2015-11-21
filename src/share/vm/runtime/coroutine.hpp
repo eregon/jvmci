@@ -144,7 +144,7 @@ public:
   bool is_disposable();
 
   // GC support
-  void oops_do(OopClosure* f, CLDToOopClosure* cld_f, CodeBlobClosure* cf);
+  void oops_do(OopClosure* f, CLDClosure* cld_f, CodeBlobClosure* cf);
   void nmethods_do(CodeBlobClosure* cf);
   void metadata_do(void f(Metadata*));
   void frames_do(void f(frame*, const RegisterMap* map));
