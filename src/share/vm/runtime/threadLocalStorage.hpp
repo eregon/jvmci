@@ -43,6 +43,9 @@ class ThreadLocalStorage : AllStatic {
   static Thread* get_thread_slow();
   static void    invalidate_all() { pd_invalidate_all(); }
 
+  static void    add_coroutine_stack(Thread* thread, address stack_base, size_t stack_size);
+  static void    remove_coroutine_stack(Thread* thread, address stack_base, size_t stack_size);
+
   // Machine dependent stuff
 #ifdef TARGET_OS_ARCH_linux_x86
 # include "threadLS_linux_x86.hpp"
@@ -97,6 +100,10 @@ class ThreadLocalStorage : AllStatic {
   // Processor dependent parts of set_thread and initialization
   static void pd_set_thread(Thread* thread);
   static void pd_init();
+
+  static void pd_add_coroutine_stack(Thread* thread, address stack_base, size_t stack_size);
+  static void pd_remove_coroutine_stack(Thread* thread, address stack_base, size_t stack_size);
+
   // Invalidate any thread cacheing or optimization schemes.
   static void pd_invalidate_all();
 
