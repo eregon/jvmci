@@ -1909,8 +1909,8 @@ JVM_ENTRY(void, JVM_RegisterCoroutineSupportMethods(JNIEnv *env, jclass corocls)
         {
           ThreadInVMfromNative tivfn(thread);
           methodHandle method(Method::resolve_jmethod_id(id));
-          uint id = 0; // CompileBroker::assign_compile_id(method, InvocationEntryBci);
-          nmethod* nm = AdapterHandlerLibrary::create_native_wrapper(method, id);
+          // uint id = CompileBroker::assign_compile_id(method, InvocationEntryBci);
+          AdapterHandlerLibrary::create_native_wrapper(method);
         }
       }
     }
