@@ -257,8 +257,8 @@ CoroutineStack* CoroutineStack::create_thread_stack(JavaThread* thread) {
 
   stack->_thread = thread;
   stack->_is_thread_stack = true;
-  stack->_reserved_space;
-  stack->_virtual_space;
+  // stack->_reserved_space;
+  // stack->_virtual_space;
   stack->_stack_base = thread->stack_base();
   stack->_stack_size = thread->stack_size();
   stack->_last_sp = NULL;
