@@ -51,6 +51,7 @@
 #include "prims/privilegedStack.hpp"
 #include "runtime/arguments.hpp"
 #include "runtime/biasedLocking.hpp"
+#include "runtime/coroutine.hpp"
 #include "runtime/deoptimization.hpp"
 #include "runtime/fprofiler.hpp"
 #include "runtime/frame.inline.hpp"
@@ -343,6 +344,7 @@ void Thread::record_stack_base_and_size() {
 
 
 Thread::~Thread() {
+
   // Reclaim the objectmonitors from the omFreeList of the moribund thread.
   ObjectSynchronizer::omFlush (this) ;
 
@@ -1506,6 +1508,13 @@ void JavaThread::initialize() {
   _interp_only_mode    = 0;
   _special_runtime_exit_condition = _no_async_condition;
   _pending_async_exception = NULL;
+
+  _coroutine_stack_cache = NULL;
+  _coroutine_stack_cache_size = 0;
+
+  _coroutine_stack_list = NULL;
+  _coroutine_list = NULL;
+
   _thread_stat = NULL;
   _thread_stat = new ThreadStatistics();
   _blocked_on_compilation = false;
@@ -1640,6 +1649,13 @@ JavaThread::JavaThread(ThreadFunction entry_point, size_t stack_sz) :
 }
 
 JavaThread::~JavaThread() {
+
+  while (coroutine_stack_cache() != NULL) {
+    CoroutineStack* stack = coroutine_stack_cache();
+    stack->remove_from_list(coroutine_stack_cache());
+    CoroutineStack::free_stack(stack, this);
+  }
+
   if (TraceThreadEvents) {
       tty->print_cr("terminate thread %p", this);
   }
@@ -1699,6 +1715,8 @@ void JavaThread::run() {
 
   // Record real stack base and size.
   this->record_stack_base_and_size();
+
+  this->initialize_coroutine_support();
 
   // Initialize thread local storage; set before calling MutexLocker
   this->initialize_thread_local_storage();
@@ -2655,6 +2673,12 @@ void JavaThread::frames_do(void f(frame*, const RegisterMap* map)) {
     frame* fr = fst.current();
     f(fr, fst.register_map());
   }
+  // traverse the coroutine stack frames
+  Coroutine* current = _coroutine_list;
+  do {
+    current->frames_do(f);
+    current = current->next();
+  } while (current != _coroutine_list);
 }
 
 
@@ -2813,6 +2837,13 @@ void JavaThread::oops_do(OopClosure* f, CLDClosure* cld_f, CodeBlobClosure* cf) 
       fst.current()->oops_do(f, cld_f, cf, fst.register_map());
     }
   }
+  
+
+  Coroutine* current = _coroutine_list;
+  do {
+    current->oops_do(f, cld_f, cf);
+    current = current->next();
+  } while (current != _coroutine_list);
 
   // callee_target is never live across a gc point so NULL it here should
   // it still contain a methdOop.
@@ -2860,6 +2891,12 @@ void JavaThread::nmethods_do(CodeBlobClosure* cf) {
       fst.current()->nmethods_do(cf);
     }
   }
+
+  Coroutine* current = _coroutine_list;
+  do {
+    current->nmethods_do(cf);
+    current = current->next();
+  } while (current != _coroutine_list);
 }
 
 void JavaThread::metadata_do(void f(Metadata*)) {
@@ -2876,6 +2913,13 @@ void JavaThread::metadata_do(void f(Metadata*)) {
       ct->env()->metadata_do(f);
     }
   }
+
+  Coroutine* current = _coroutine_list;
+  do {
+    current->metadata_do(f);
+    current = current->next();
+  } while (current != _coroutine_list);
+
 }
 
 // Printing
@@ -3469,6 +3513,7 @@ jint Threads::create_vm(JavaVMInitArgs* args, bool* canTryAgain) {
   // stacksize. This adjusted size is what is used to figure the placement
   // of the guard pages.
   main_thread->record_stack_base_and_size();
+  main_thread->initialize_coroutine_support();
   main_thread->initialize_thread_local_storage();
 
   main_thread->set_active_handles(JNIHandleBlock::allocate_block());
@@ -4760,4 +4805,10 @@ void Threads::verify() {
   }
   VMThread* thread = VMThread::vm_thread();
   if (thread != NULL) thread->verify();
+}
+
+
+void JavaThread::initialize_coroutine_support() {
+  CoroutineStack::create_thread_stack(this)->insert_into_list(_coroutine_stack_list);
+  Coroutine::create_thread_coroutine(this, _coroutine_stack_list)->insert_into_list(_coroutine_list);
 }

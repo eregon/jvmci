@@ -438,6 +438,7 @@
   template(void_double_signature,                     "()D")                                      \
   template(bool_void_signature,                       "(Z)V")                                     \
   template(int_void_signature,                        "(I)V")                                     \
+  template(long_void_signature,                       "(J)V")                                     \
   template(int_int_signature,                         "(I)I")                                     \
   template(char_char_signature,                       "(C)C")                                     \
   template(short_short_signature,                     "(S)S")                                     \
@@ -562,7 +563,7 @@
   template(createGarbageCollectorMBean_signature,      "(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/management/GarbageCollectorMBean;") \
   template(trigger_name,                               "trigger")                                                 \
   template(clear_name,                                 "clear")                                                   \
-  template(trigger_method_signature,                   "(ILjava/lang/management/MemoryUsage;)V")                                                 \
+  template(trigger_method_signature,                   "(ILjava/lang/management/MemoryUsage;)V")                  \
   template(startAgent_name,                            "startAgent")                                              \
   template(startRemoteAgent_name,                      "startRemoteManagementAgent")                              \
   template(startLocalAgent_name,                       "startLocalManagementAgent")                               \
@@ -584,7 +585,7 @@
   template(addThreadDumpForMonitors_name,              "addThreadDumpForMonitors")                                \
   template(addThreadDumpForSynchronizers_name,         "addThreadDumpForSynchronizers")                           \
   template(addThreadDumpForMonitors_signature,         "(Ljava/lang/management/ThreadInfo;[Ljava/lang/Object;[I)V") \
-  template(addThreadDumpForSynchronizers_signature,    "(Ljava/lang/management/ThreadInfo;[Ljava/lang/Object;)V")   \
+  template(addThreadDumpForSynchronizers_signature,    "(Ljava/lang/management/ThreadInfo;[Ljava/lang/Object;)V") \
                                                                                                                   \
   /* JVMTI/java.lang.instrument support and VM Attach mechanism */                                                \
   template(sun_misc_VMSupport,                         "sun/misc/VMSupport")                                      \
@@ -595,6 +596,26 @@
   template(serializeAgentPropertiesToByteArray_name,   "serializeAgentPropertiesToByteArray")                     \
   template(classRedefinedCount_name,                   "classRedefinedCount")                                     \
   template(classLoader_name,                           "classLoader")                                             \
+                                                                                                                  \
+  /* coroutine support */                                                                                         \
+  template(java_dyn_CoroutineSupport,                  "java/dyn/CoroutineSupport")                               \
+  template(java_dyn_CoroutineBase,                     "java/dyn/CoroutineBase")                                  \
+  template(java_dyn_CoroutineExitException,            "java/dyn/CoroutineExitException")                         \
+  template(data_name,                                  "data")                                                    \
+  template(stack_name,                                 "stack")                                                   \
+  template(current_name,                               "current")                                                 \
+  template(java_dyn_CoroutineBase_signature,           "Ljava/dyn/CoroutineBase;")                                \
+  template(reflect_method_signature,                   "Ljava/lang/reflect/Method;")                              \
+  template(startInternal_method_name,                  "startInternal")                                           \
+  template(initializeCoroutineSupport_method_name,     "initializeCoroutineSupport")                              \
+  template(method_name,                                "method")                                                  \
+  template(bci_name,                                   "bci")                                                     \
+  template(localCount_name,                            "localCount")                                              \
+  template(expressionCount_name,                       "expressionCount")                                         \
+  template(scalarValues_name,                          "scalarValues")                                            \
+  template(objectValues_name,                          "objectValues")                                            \
+  template(long_array_signature,                       "[J")                                                      \
+  template(object_array_signature,                     "[Ljava/lang/Object;")                                     \
                                                                                                                   \
   /* trace signatures */                                                                                          \
   TRACE_TEMPLATES(template)                                                                                       \
@@ -1034,8 +1055,18 @@
    do_name(     prefetchReadStatic_name,                         "prefetchReadStatic")                                  \
   do_intrinsic(_prefetchWriteStatic,      sun_misc_Unsafe,        prefetchWriteStatic_name, prefetch_signature,  F_SN)  \
    do_name(     prefetchWriteStatic_name,                        "prefetchWriteStatic")                                 \
+                                                                                                                        \
     /*== LAST_COMPILER_INLINE*/                                                                                         \
     /*the compiler does have special inlining code for these; bytecode inline is just fine */                           \
+                                                                                                                        \
+  /* coroutine intrinsics */                                                                                            \
+  do_intrinsic(_switchTo,                 java_dyn_CoroutineSupport, switchTo_name, switchTo_signature, F_SN)           \
+   do_name(     switchTo_name,                                    "switchTo")                                           \
+   do_signature(switchTo_signature,                               "(Ljava/dyn/CoroutineBase;Ljava/dyn/CoroutineBase;)V") \
+  do_intrinsic(_switchToAndTerminate,     java_dyn_CoroutineSupport, switchToAndTerminate_name, switchTo_signature, F_SN) \
+   do_name(     switchToAndTerminate_name,                        "switchToAndTerminate")                               \
+  do_intrinsic(_switchToAndExit,          java_dyn_CoroutineSupport, switchToAndExit_name, switchTo_signature, F_SN)    \
+   do_name(     switchToAndExit_name,                             "switchToAndExit")                                    \
                                                                                                                         \
   do_intrinsic(_fillInStackTrace,         java_lang_Throwable, fillInStackTrace_name, void_throwable_signature,  F_RNY) \
                                                                                                                           \
