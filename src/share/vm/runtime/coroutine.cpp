@@ -190,14 +190,14 @@ void Coroutine::frames_do(FrameClosure* fc) {
 class oops_do_Closure: public FrameClosure {
 private:
   OopClosure* _f;
+  CLDClosure* _cld_f;
   CodeBlobClosure* _cf;
-  CLDToOopClosure* _cld_f;
 public:
-  oops_do_Closure(OopClosure* f, CLDToOopClosure* cld_f, CodeBlobClosure* cf): _f(f), _cld_f(cld_f), _cf(cf) { }
+  oops_do_Closure(OopClosure* f, CLDClosure* cld_f, CodeBlobClosure* cf): _f(f), _cld_f(cld_f), _cf(cf) { }
   void frames_do(frame* fr, RegisterMap* map) { fr->oops_do(_f, _cld_f, _cf, map); }
 };
 
-void Coroutine::oops_do(OopClosure* f, CLDToOopClosure* cld_f, CodeBlobClosure* cf) {
+void Coroutine::oops_do(OopClosure* f, CLDClosure* cld_f, CodeBlobClosure* cf) {
   oops_do_Closure fc(f, cld_f, cf);
   frames_do(&fc);
   if (_state == _onstack &&_handle_area != NULL) {
