@@ -598,13 +598,13 @@
   template(classLoader_name,                           "classLoader")                                             \
                                                                                                                   \
   /* coroutine support */                                                                                         \
-  template(java_dyn_CoroutineSupport,                  "java/dyn/CoroutineSupport")                               \
-  template(java_dyn_CoroutineBase,                     "java/dyn/CoroutineBase")                                  \
-  template(java_dyn_CoroutineExitException,            "java/dyn/CoroutineExitException")                         \
+  template(com_oracle_truffle_coro_CoroutineSupport,   "com/oracle/truffle/coro/CoroutineSupport")                \
+  template(com_oracle_truffle_coro_CoroutineBase,      "com/oracle/truffle/coro/CoroutineBase")                   \
+  template(com_oracle_truffle_coro_CoroutineExitException, "com/oracle/truffle/coro/CoroutineExitException")      \
   template(data_name,                                  "data")                                                    \
   template(stack_name,                                 "stack")                                                   \
   template(current_name,                               "current")                                                 \
-  template(java_dyn_CoroutineBase_signature,           "Ljava/dyn/CoroutineBase;")                                \
+  template(com_oracle_truffle_coro_CoroutineBase_signature, "Lcom/oracle/truffle/coro/CoroutineBase;")            \
   template(reflect_method_signature,                   "Ljava/lang/reflect/Method;")                              \
   template(startInternal_method_name,                  "startInternal")                                           \
   template(initializeCoroutineSupport_method_name,     "initializeCoroutineSupport")                              \
@@ -1060,12 +1060,12 @@
     /*the compiler does have special inlining code for these; bytecode inline is just fine */                           \
                                                                                                                         \
   /* coroutine intrinsics */                                                                                            \
-  do_intrinsic(_switchTo,                 java_dyn_CoroutineSupport, switchTo_name, switchTo_signature, F_SN)           \
+  do_intrinsic(_switchTo,  com_oracle_truffle_coro_CoroutineSupport, switchTo_name, switchTo_signature, F_SN)           \
    do_name(     switchTo_name,                                    "switchTo")                                           \
-   do_signature(switchTo_signature,                               "(Ljava/dyn/CoroutineBase;Ljava/dyn/CoroutineBase;)V") \
-  do_intrinsic(_switchToAndTerminate,     java_dyn_CoroutineSupport, switchToAndTerminate_name, switchTo_signature, F_SN) \
+   do_signature(switchTo_signature, "(Lcom/oracle/truffle/coro/CoroutineBase;Lcom/oracle/truffle/coro/CoroutineBase;)V") \
+  do_intrinsic(_switchToAndTerminate, com_oracle_truffle_coro_CoroutineSupport, switchToAndTerminate_name, switchTo_signature, F_SN) \
    do_name(     switchToAndTerminate_name,                        "switchToAndTerminate")                               \
-  do_intrinsic(_switchToAndExit,          java_dyn_CoroutineSupport, switchToAndExit_name, switchTo_signature, F_SN)    \
+  do_intrinsic(_switchToAndExit, com_oracle_truffle_coro_CoroutineSupport, switchToAndExit_name, switchTo_signature, F_SN) \
    do_name(     switchToAndExit_name,                             "switchToAndExit")                                    \
                                                                                                                         \
   do_intrinsic(_fillInStackTrace,         java_lang_Throwable, fillInStackTrace_name, void_throwable_signature,  F_RNY) \

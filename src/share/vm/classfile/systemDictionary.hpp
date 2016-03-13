@@ -198,8 +198,8 @@ class Ticks;
   do_klass(Long_klass,                                  java_lang_Long,                            Pre                 ) \
                                                                                                                          \
   /* Stack manipulation classes */                                                                                       \
-  do_klass(coroutine_support_klass,                     java_dyn_CoroutineSupport,                 Opt                 ) \
-  do_klass(coroutine_base_klass,                        java_dyn_CoroutineBase,                    Opt                 ) \
+  do_klass(coroutine_support_klass,                     com_oracle_truffle_coro_CoroutineSupport,  Opt                 ) \
+  do_klass(coroutine_base_klass,                        com_oracle_truffle_coro_CoroutineBase,     Opt                 ) \
                                                                                                                          \
   /* JVMCI classes. These are loaded on-demand. */                                                                       \
   JVMCI_WK_KLASSES_DO(do_klass) \

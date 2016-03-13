@@ -1375,7 +1375,7 @@ void CoroutineSupport_switchToAndExit(JNIEnv* env, jclass klass, jobject old_cor
   {
     ThreadInVMfromNative tivm(THREAD);
     HandleMark mark(THREAD);
-    THROW(vmSymbols::java_dyn_CoroutineExitException());
+    THROW(vmSymbols::com_oracle_truffle_coro_CoroutineExitException());
   }
 }
 
@@ -1772,7 +1772,7 @@ JNINativeMethod fence_methods[] = {
     {CC"fullFence",          CC"()V",                    FN_PTR(Unsafe_FullFence)},
 };
 
-#define COBA "Ljava/dyn/CoroutineBase;"
+#define COBA "Lcom/oracle/truffle/coro/CoroutineBase;"
 
 JNINativeMethod coroutine_support_methods[] = {
     {CC"getThreadCoroutine",      CC"()J",            FN_PTR(CoroutineSupport_getThreadCoroutine)},
