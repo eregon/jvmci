@@ -5253,21 +5253,21 @@ _JNI_IMPORT_OR_EXPORT_ jint JNICALL JNI_CreateJavaVM(JavaVM **vm, void **penv, v
     Handle obj(THREAD, thread->threadObj());
     JavaValue result(T_VOID);
 
-    if (SystemDictionary::coroutine_support_klass() != NULL) {
-      InstanceKlass::cast(SystemDictionary::Class_klass())->initialize(CHECK_0);
-      InstanceKlass::cast(SystemDictionary::coroutine_support_klass())->initialize(CHECK_0);
-      JavaCalls::call_virtual(&result,
-                              obj,
-                              KlassHandle(THREAD, SystemDictionary::Thread_klass()),
-                              vmSymbols::initializeCoroutineSupport_method_name(),
-                              vmSymbols::void_method_signature(),
-                              THREAD);
-      if (THREAD->has_pending_exception()) {
-        java_lang_Throwable::print_stack_trace(THREAD->pending_exception(), tty);
-        THREAD->clear_pending_exception();
-        vm_abort(false);
-      }
-    }
+//    if (SystemDictionary::coroutine_support_klass() != NULL) {
+//      InstanceKlass::cast(SystemDictionary::Class_klass())->initialize(CHECK_0);
+//      InstanceKlass::cast(SystemDictionary::coroutine_support_klass())->initialize(CHECK_0);
+//      JavaCalls::call_virtual(&result,
+//                              obj,
+//                              KlassHandle(THREAD, SystemDictionary::Thread_klass()),
+//                              vmSymbols::initializeCoroutineSupport_method_name(),
+//                              vmSymbols::void_method_signature(),
+//                              THREAD);
+//      if (THREAD->has_pending_exception()) {
+//        java_lang_Throwable::print_stack_trace(THREAD->pending_exception(), tty);
+//        THREAD->clear_pending_exception();
+//        vm_abort(false);
+//      }
+//    }
 
     // Since this is not a JVM_ENTRY we have to set the thread state manually before leaving.
     ThreadStateTransition::transition_and_fence(thread, _thread_in_vm, _thread_in_native);
