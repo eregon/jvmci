@@ -599,7 +599,7 @@
   template(classLoader_name,                           "classLoader")                                             \
                                                                                                                   \
   /* coroutine support */                                                                                         \
-  template(java_dyn_CoroutineSupport,                  "com/oracle/truffle/coro/CoroutineSupport")                \
+  template(java_dyn_CoroutineSupport,                  "com/oracle/truffle/coro/NativeCoroutineSupport")          \
   template(java_dyn_CoroutineBase,                     "com/oracle/truffle/coro/CoroutineBase")                   \
   template(java_dyn_CoroutineExitException,            "com/oracle/truffle/coro/CoroutineExitException")          \
   template(data_name,                                  "data")                                                    \
