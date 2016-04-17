@@ -598,7 +598,7 @@
   template(classLoader_name,                           "classLoader")                                             \
                                                                                                                   \
   /* coroutine support */                                                                                         \
-  template(com_oracle_truffle_coro_CoroutineSupport,   "com/oracle/truffle/coro/CoroutineSupport")                \
+  template(com_oracle_truffle_coro_CoroutineSupport,   "com/oracle/truffle/coro/NativeCoroutineSupport")          \
   template(com_oracle_truffle_coro_CoroutineBase,      "com/oracle/truffle/coro/CoroutineBase")                   \
   template(com_oracle_truffle_coro_CoroutineExitException, "com/oracle/truffle/coro/CoroutineExitException")      \
   template(data_name,                                  "data")                                                    \
