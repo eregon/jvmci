@@ -143,6 +143,7 @@ Coroutine* Coroutine::create_coroutine(JavaThread* thread, CoroutineStack* stack
 
   intptr_t** d = (intptr_t**)stack->stack_base();
   *(--d) = NULL;
+  *(--d) = NULL;
   jobject obj = JNIHandles::make_global(coroutineObj);
   *(--d) = (intptr_t*)obj;
   *(--d) = (intptr_t*)coro;
