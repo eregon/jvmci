@@ -1800,7 +1800,7 @@ JNINativeMethod fence_methods[] = {
     {CC"fullFence",          CC"()V",                    FN_PTR(Unsafe_FullFence)},
 };
 
-#define COBA "Ljava/dyn/CoroutineBase;"
+#define COBA "Lcom/oracle/truffle/coro/CoroutineBase;"
 
 JNINativeMethod coroutine_support_methods[] = {
     {CC"getThreadCoroutine",      CC"()J",            FN_PTR(CoroutineSupport_getThreadCoroutine)},
