@@ -142,7 +142,7 @@ static JNINativeMethod lookup_special_native_methods[] = {
   { CC"Java_sun_misc_Unsafe_registerNatives",                      NULL, FN_PTR(JVM_RegisterUnsafeMethods)       },
   { CC"Java_java_lang_invoke_MethodHandleNatives_registerNatives", NULL, FN_PTR(JVM_RegisterMethodHandleMethods) },
   { CC"Java_sun_misc_Perf_registerNatives",                        NULL, FN_PTR(JVM_RegisterPerfMethods)         },
-  { CC"Java_java_dyn_CoroutineSupport_registerNatives",            NULL, FN_PTR(JVM_RegisterCoroutineSupportMethods)},
+  { CC"Java_com_oracle_truffle_coro_CoroutineSupport_registerNatives", NULL, FN_PTR(JVM_RegisterCoroutineSupportMethods)},
   { CC"Java_sun_hotspot_WhiteBox_registerNatives",                 NULL, FN_PTR(JVM_RegisterWhiteBoxMethods)     },
 #if INCLUDE_JVMCI
   { CC"Java_jdk_vm_ci_services_JVMCIClassLoaderFactory_init", NULL, FN_PTR(JVM_InitJVMCIClassLoader)     },
