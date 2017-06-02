@@ -35,7 +35,7 @@
 // number of heap words that prepareSwitch will add as a safety measure to the CoroutineData size
 #define COROUTINE_DATA_OVERSIZE (64)
 
-//#define DEBUG_COROUTINES
+#define DEBUG_COROUTINES
 
 #ifdef DEBUG_COROUTINES
 #define DEBUG_CORO_ONLY(x) x
@@ -172,7 +172,7 @@ public:
 };
 
 class CoroutineStack: public CHeapObj<mtThread>, public DoublyLinkedList<CoroutineStack> {
-private:
+public:
   JavaThread*     _thread;
 
   bool            _is_thread_stack;

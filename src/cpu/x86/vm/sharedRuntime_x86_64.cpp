@@ -2597,15 +2597,18 @@ nmethod* SharedRuntime::generate_native_wrapper(MacroAssembler* masm,
 
     Label normal;
     __ lea(rcx, RuntimeAddress((unsigned char*)coroutine_start));
-    __ cmpq(Address(rsp, 0), rcx);
+    __ cmpq(Address(rsp, HeapWordSize), rcx);
     __ jcc(Assembler::notEqual, normal);
 
     __ movq(c_rarg0, Address(rsp, HeapWordSize * 2));
     __ movq(c_rarg1, Address(rsp, HeapWordSize * 3));
+    // rsp must be unaligned
+    __ addptr(rsp, HeapWordSize);
 
     __ bind(normal);
-
+    // rsp aligned
     __ ret(0);        // <-- this will jump to the stored IP of the target coroutine
+    // rsp unaligned
   }
 
   __ ret(0);
@@ -4676,16 +4679,19 @@ void create_switchTo_contents(MacroAssembler *masm, int start, OopMapSet* oop_ma
 
       Label normal;
       __ lea(rcx, RuntimeAddress((unsigned char*)coroutine_start));
-      __ cmpq(Address(rsp, 0), rcx);
+      __ cmpq(Address(rsp, HeapWordSize), rcx);
       __ jcc(Assembler::notEqual, normal);
 
       __ movq(c_rarg0, Address(rsp, HeapWordSize * 2));
       __ movq(c_rarg1, Address(rsp, HeapWordSize * 3));
 
-      __ bind(normal);
+      // rsp must be unaligned
+      __ addptr(rsp, HeapWordSize);
 
+      __ bind(normal);
+      // rsp needs to be aligned
       __ ret(0);        // <-- this will jump to the stored IP of the target coroutine
-      
+      // rsp needs to be unaligned
     } else {
       //////////////////////////////////////////////////////////////////////////
       // slow case (terminate old coroutine)
@@ -4699,6 +4705,8 @@ void create_switchTo_contents(MacroAssembler *masm, int start, OopMapSet* oop_ma
         __ movptr(j_rarg0, rsi);
       }
       __ movptr(j_rarg1, 0);
+
+      // rsp needs to be unaligned
     }
   }
 }

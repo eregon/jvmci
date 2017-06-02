@@ -142,13 +142,13 @@ Coroutine* Coroutine::create_coroutine(JavaThread* thread, CoroutineStack* stack
   }
 
   intptr_t** d = (intptr_t**)stack->stack_base();
-  *(--d) = NULL;
+  // *(--d) = NULL; // try
   *(--d) = NULL;
   jobject obj = JNIHandles::make_global(coroutineObj);
   *(--d) = (intptr_t*)obj;
   *(--d) = (intptr_t*)coro;
-  *(--d) = NULL;
   *(--d) = (intptr_t*)coroutine_start;
+  *(--d) = NULL;
   *(--d) = NULL;
 
   stack->set_last_sp((address) d);
